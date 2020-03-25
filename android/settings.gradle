@@ -1,0 +1,6 @@
+rootProject.name = 'bleTestProject0323'
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+include ':app', ':VUIoHT', ':app2', ':GtechBle'
+project(':VUIoHT').projectDir = new File('gtech_ble/VUIoHT')
+project(':app2').projectDir = new File('gtech_ble/app')
+project(':GtechBle').projectDir = new File('gtech_ble/GtechBle')
