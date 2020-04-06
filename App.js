@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React,{ useState } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -15,6 +15,8 @@ import {
   Text,
   StatusBar,
   DeviceEventEmitter,
+  Alert,
+  BackHandler,
 } from 'react-native';
 
 import {
@@ -25,68 +27,125 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import { Button } from 'react-native-elements';
+import DeviceInfo from 'react-native-device-info';
+import {ActivityIndicator} from 'react-native-paper';
+import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import PeopleOpen from './src/PeopleOpen.js';
 
 const App: () => React$Node = () => {
-  const [count, setCount] = useState('0.0');
-  const [count2, setCount2] = useState('0.0');
-  const [count3, setCount3] = useState('0.0');
-  const [count4, setCount4] = useState('0.0');
-  const [count5, setCount5] = useState('0.0');
+  const [status, setStatus] = useState(true);
+  const [data, setdata] = useState({});
+  const [loading, setloading] = useState(true);
+  const [people, setpeople] = useState({});
 
 
-  const nativeEventListener = DeviceEventEmitter.addListener('onStop',
-  (e)=>{
-    console.log("NATIVE_EVENT",e.event);
-    console.log("NATIVE_EVENT2",e.event2);
-    setCount(e.event);
-    setCount2(e.event2);
-});
-const nativeEventListener2 = DeviceEventEmitter.addListener('blood',
-(e)=>{
-  console.log("NATIVE_EVENT3",e.event3);
-  console.log("NATIVE_EVENT4",e.event4);
-  console.log("NATIVE_EVENT5",e.event5);
-  setCount3(e.event3);
-  setCount4(e.event4);
-  setCount5(e.event5);
-});
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
+  const getPeopleList = async () => {
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrgCaseData`;
+    console.log(`Making List request to: ${url}`);
 
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-            <Button title={`額溫:    ${count}`} titleStyle={{fontSize: 25}}/>
-            <Button title={`環境溫度:    ${count2}`} titleStyle={{fontSize: 25}}/>
+    const data = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        OrgId: 'SIHU',
+      }),
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log('List AJAX', res);
+        if (res.ErrorCode === 'E00') {
+          setdata(res);
+          setloading(false);
+        } else {
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {
+                getPeopleList();
+              },
+            },
+          ]);
+        }
+      })
+      .catch(err =>
+        Alert.alert('網路異常，請稍後再試...', ' ', [
+          {
+            text: '確定',
+            onPress: () => {},
+          },
+        ]),
+      );
+  };
 
+  useEffect(() => {
+    getPeopleList();
+    console.log('INTO LIST');
+    const backAction = () => {
+      Alert.alert('確定要離開APP?', ' ', [
+        {
+          text: '取消',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {text: '確定', onPress: () => BackHandler.exitApp()},
+      ]);
+      return true;
+    };
 
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => {
+      console.log('LEAVE LIST');
+      backHandler.remove();
+    };
+  }, []);
+
+ if (!loading && status) {
+    return (
+      <>
+        <SafeAreaView>
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.scrollView}>
+            <View style={styles.body}>
+              {data.CaseData.map((val, index) => {
+                return (
+                  <View style={styles.sectionContainer}>
+                  <Button
+                    title={val.CaseName}
+                    titleStyle={{fontSize: 25}}
+                    onPress={() => {
+                      setStatus(false);
+                      setpeople(val);
+                    }}
+                  />
+                  </View>
+                );
+              })}
+
+              
             </View>
+          </ScrollView>
+        </SafeAreaView>
+      </>
+    );
+  } 
 
-
-
-          </View>
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-            <Button title={`收縮壓:    ${count3}`} titleStyle={{fontSize: 25}}/>
-            <Button title={`舒張壓:    ${count4}`} titleStyle={{fontSize: 25}}/>
-            <Button title={`心率值:    ${count5}`} titleStyle={{fontSize: 25}}/>
-
-
-            </View>
-
-
-
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+  else if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator animating={true} size='large' />
+      </View>
+    );
+  }else {
+    return <PeopleOpen setStatus={setStatus} getPeopleList={getPeopleList} people={people}/>;
+  }
 };
 
 const styles = StyleSheet.create({
@@ -101,7 +160,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
   },
   sectionContainer: {
-    marginTop: 32,
+    marginTop: 10,
+    marginBottom: 10,
     paddingHorizontal: 24,
   },
   sectionTitle: {
