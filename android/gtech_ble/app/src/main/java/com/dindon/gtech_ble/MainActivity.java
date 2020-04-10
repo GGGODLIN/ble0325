@@ -1,7 +1,7 @@
 package com.dindon.gtech_ble;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.content.res.Configuration;
 import android.content.res.Resources;

@@ -40,21 +40,17 @@ const App: () => React$Node = () => {
   const [loading, setloading] = useState(true);
   const [people, setpeople] = useState({});
 
-    request(PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION)
-        .then(result => {
-          console.log('PERMISSION?', result);
-        })
-        .then(() => {
-          request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
-            .then(result => {
-              console.log('PERMISSION2?', result);
-            })
-            .then(() => {
-              request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
-                console.log('PERMISSION3?', result);
-              });
-            });
-        });
+    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+      .then(result => {
+        console.log('PERMISSION?', result);
+      })
+      .then(() => {
+        request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+          .then(result => {
+            console.log('PERMISSION2?', result);
+          })
+
+      });
   const getPeopleList = async () => {
     let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrgCaseData`;
     console.log(`Making List request to: ${url}`);
