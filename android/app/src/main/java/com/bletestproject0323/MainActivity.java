@@ -8,7 +8,6 @@ import com.dindon.ble.GtechException;
 import com.dindon.ble.deviceItems.BaseDevice;
 import com.dindon.ble.deviceItems.FORA_D40;
 import com.dindon.ble.deviceItems.FORA_IR40;
-import com.dindon.ble.deviceItems.FORA_P80;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -76,10 +75,24 @@ public class MainActivity extends ReactActivity {
 
     @Override
     public void onSuccess(BaseDevice device) {
-//            Log.d(TAG, "onSuccess" + device.getName());
+            Log.d(TAG, "onSuccess" + device.getName());
       if (device instanceof FORA_D40) {
         FORA_D40 fora_d40 = ((FORA_D40) device);
         if (fora_d40.getDataType() == 1) {
+
+        String stringValue3 = Double.toString(fora_d40.getSys());
+        String stringValue4 = Double.toString(fora_d40.getDia());
+        String stringValue5 = Double.toString(fora_d40.getPulse());
+
+        WritableMap params = Arguments.createMap(); // add here the data you want to send
+        params.putString("event3", stringValue3); // <- example
+        params.putString("event4", stringValue4); // <- example
+        params.putString("event5", stringValue5); // <- example
+
+        getReactInstanceManager().getCurrentReactContext()
+                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit("blood", params);
+
           Log.d(TAG, String.format("%s => sys = %d, dia = %d, pulse = %d", fora_d40.getDataTime(), fora_d40.getSys(), fora_d40.getDia(), fora_d40.getPulse()));
         } else if (fora_d40.getDataType() == 2) {
           Log.d(TAG, String.format("%s => mode = %d, glucose = %d", fora_d40.getDataTime(), fora_d40.getMode(), fora_d40.getGlucose()));
@@ -101,7 +114,7 @@ public class MainActivity extends ReactActivity {
 
         Log.d(TAG, String.format("%s => ObjectTemperature = %d, AmbientTemperature = %d", fora_ir40.getDataTime(), fora_ir40.getObjectTemperature(), fora_ir40.getAmbientTemperature()));
       }
-      if (device instanceof FORA_P80) {
+      /*if (device instanceof FORA_P80) {
         FORA_P80 fora_p80 = ((FORA_P80) device);
 
         String stringValue3 = Double.toString(fora_p80.getSys());
@@ -118,7 +131,7 @@ public class MainActivity extends ReactActivity {
                 .emit("blood", params);
 
         Log.d(TAG, String.format("%s => sys = %d, dia = %d, pulse = %d", fora_p80.getDataTime(), fora_p80.getSys(), fora_p80.getDia(), fora_p80.getPulse()));
-      }
+      }*/
     }
 
     @Override
