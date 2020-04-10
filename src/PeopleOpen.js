@@ -147,61 +147,59 @@ const PeopleOpen = props => {
     console.log('md5 Hash is', md5People);
     console.log('FORMAT', formatNow, typeof formatNow);
 
-    if(todo===1){
+    if (todo === 1) {
       const dataIn = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S01',
-        Reporting: true,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('In AJAX', res);
-        
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S01',
+          Reporting: true,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('In AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
     }
 
-    if(todo===3){
+    if (todo === 3) {
       const dataOut = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S02',
-        SignOut: true,
-        AllDay: true,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('Out AJAX', res);
-        
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S02',
+          SignOut: true,
+          AllDay: true,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('Out AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
     }
 
     const data2 = await fetch(url, {
@@ -429,14 +427,20 @@ const PeopleOpen = props => {
               buttonStyle={{backgroundColor: 'orange'}}
               onPress={() => {
                 Alert.alert('確定送出?', '', [
-          {
-            text: '確定',
-            onPress: () => {
-              postDataApi();
-            },
-          },
-        ]);
-                
+                  {
+                    text: '取消',
+                    onPress: () => {
+                      
+                    },
+                  },
+                  {
+                    text: '確定',
+                    onPress: () => {
+                      postDataApi();
+                    },
+                  },
+                  
+                ]);
               }}
             />
           </View>
