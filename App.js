@@ -32,6 +32,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PeopleOpen from './src/PeopleOpen.js';
+import {request, PERMISSIONS} from 'react-native-permissions';
 
 const App: () => React$Node = () => {
   const [status, setStatus] = useState(true);
@@ -39,7 +40,21 @@ const App: () => React$Node = () => {
   const [loading, setloading] = useState(true);
   const [people, setpeople] = useState({});
 
-
+    request(PERMISSIONS.ANDROID.ACTIVITY_RECOGNITION)
+        .then(result => {
+          console.log('PERMISSION?', result);
+        })
+        .then(() => {
+          request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
+            .then(result => {
+              console.log('PERMISSION2?', result);
+            })
+            .then(() => {
+              request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(result => {
+                console.log('PERMISSION3?', result);
+              });
+            });
+        });
   const getPeopleList = async () => {
     let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrgCaseData`;
     console.log(`Making List request to: ${url}`);
@@ -129,13 +144,13 @@ const App: () => React$Node = () => {
                 );
               })}
 
-              
+
             </View>
           </ScrollView>
         </SafeAreaView>
       </>
     );
-  } 
+  }
 
   else if (loading) {
     return (
