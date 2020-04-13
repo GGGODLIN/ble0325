@@ -75,6 +75,7 @@ const App: () => React$Node = () => {
             {
               text: '確定',
               onPress: () => {
+                console.log(res);
                 getPeopleList();
               },
             },
@@ -85,7 +86,10 @@ const App: () => React$Node = () => {
         Alert.alert('網路異常，請稍後再試...', ' ', [
           {
             text: '確定',
-            onPress: () => {},
+            onPress: () => {
+              console.log('ERR2',err);
+              getPeopleList();
+            },
           },
         ]),
       );

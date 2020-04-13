@@ -135,7 +135,7 @@ const PeopleOpen = props => {
 
   const postDataApi = async () => {
     let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/sihu/api/CaseReportApi/RequestService`;
-
+    let url2 = `http://slllc.health.1966.org.tw/api/CaseReport`;
     console.log(`Making submit 生理量測 request to: ${url}`);
     let md5People = md5(props.people.CaseIdentity);
     let now = new Date();
@@ -149,6 +149,31 @@ const PeopleOpen = props => {
 
     if (todo === 1) {
       const dataIn = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S01',
+          Reporting: true,
+        }),
+      })
+        .then(response => response.json())
+        .then(res => {
+          console.log('In AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
+
+        const dataIn2 = await fetch(url2, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -200,9 +225,60 @@ const PeopleOpen = props => {
             },
           ]),
         );
+
+        const dataOut2 = await fetch(url2, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S02',
+          SignOut: true,
+          AllDay: true,
+        }),
+      })
+        .then(response => response.json())
+        .then(res => {
+          console.log('Out AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
     }
 
     const data2 = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        IdentityId: md5People,
+        ServiceDate: formatNow,
+        ServiceCode: 'S03',
+        IsDinner: IsDinner,
+      }),
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log('POST DATA2 AJAX', res);
+      })
+      .catch(err =>
+        Alert.alert('網路異常，請稍後再試...', ' ', [
+          {
+            text: '確定',
+            onPress: () => {},
+          },
+        ]),
+      );
+
+      const data22 = await fetch(url2, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -252,7 +328,57 @@ const PeopleOpen = props => {
         ]),
       );
 
+      const data32 = await fetch(url2, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        IdentityId: md5People,
+        ServiceDate: formatNow,
+        ServiceCode: 'S04',
+        IsBathe: IsBathe,
+      }),
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log('POST DATA3 AJAX', res);
+      })
+      .catch(err =>
+        Alert.alert('網路異常，請稍後再試...', ' ', [
+          {
+            text: '確定',
+            onPress: () => {},
+          },
+        ]),
+      );
+
     const data4 = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        IdentityId: md5People,
+        ServiceDate: formatNow,
+        ServiceCode: 'S05',
+        IsAccommodation: IsAccommodation,
+      }),
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log('POST DATA4 AJAX', res);
+      })
+      .catch(err =>
+        Alert.alert('網路異常，請稍後再試...', ' ', [
+          {
+            text: '確定',
+            onPress: () => {},
+          },
+        ]),
+      );
+
+      const data42 = await fetch(url2, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -315,6 +441,38 @@ const PeopleOpen = props => {
           },
         ]),
       );
+
+      const data10 = await fetch('http://slllc.health.1966.org.tw/api/CaseReport', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        IdentityId: md5People,
+        ServiceDate: formatNow,
+        ServiceCode: 'S06',
+        IsHeartbeat: IsHeartbeat,
+        HeartbeatValue: count5,
+        IsBloodPressure: IsBloodPressure,
+        SystolicValue: count3,
+        DiastolicValue: count4,
+        IsTemperature: IsTemperature,
+        TemperatureValue: count,
+      }),
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log('POST DATA10 AJAX', res);
+        Alert.alert('成功', res.Message, [
+          {
+            text: '確定',
+            onPress: () => {
+              goBackToPeople();
+            },
+          },
+        ]);
+      })
+      .catch(err =>console.log("GGWP",err));
   };
 
   const goBackToPeople = () => {
