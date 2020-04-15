@@ -39,6 +39,7 @@ const PeopleOpen = props => {
   const [count3, setCount3] = useState(0);
   const [count4, setCount4] = useState(0);
   const [count5, setCount5] = useState(0);
+  const [IsAllDay, setIsAllDay] = useState(false);
   const [IsDinner, setIsDinner] = useState(false);
   const [IsBathe, setIsBathe] = useState(false);
   const [IsAccommodation, setIsAccommodation] = useState(false);
@@ -158,6 +159,7 @@ const PeopleOpen = props => {
           ServiceDate: formatNow,
           ServiceCode: 'S01',
           Reporting: true,
+          AllDay: IsAllDay,
         }),
       })
         .then(response => response.json())
@@ -183,6 +185,7 @@ const PeopleOpen = props => {
           ServiceDate: formatNow,
           ServiceCode: 'S01',
           Reporting: true,
+          AllDay: IsAllDay,
         }),
       })
         .then(response => response.json())
@@ -526,13 +529,13 @@ const PeopleOpen = props => {
               checked={todo === 2}
               onPress={() => settodo(2)}
             />
-            <CheckBox
+            {/*<CheckBox
               title="簽退(量體溫)"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={todo === 3}
               onPress={() => settodo(3)}
-            />
+            />*/}
           </View>
           <View
             style={todo === 0 ? {display: 'none'} : styles.sectionContainer}>
@@ -553,7 +556,15 @@ const PeopleOpen = props => {
               title={`心率值:    ${count5}`}
               titleStyle={{fontSize: 25}}
             />
-
+            <CheckBox
+              center
+              title="全日托"
+              checkedIcon="dot-circle-o"
+              uncheckedIcon="circle-o"
+              containerStyle={todo !== 1?{display:'none'}:{}}
+              checked={IsAllDay}
+              onPress={() => setIsAllDay(!IsAllDay)}
+            />
             <CheckBox
               center
               title="晚餐"
