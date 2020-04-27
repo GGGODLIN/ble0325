@@ -8,6 +8,7 @@ import com.dindon.ble.GtechException;
 import com.dindon.ble.deviceItems.BaseDevice;
 import com.dindon.ble.deviceItems.FORA_D40;
 import com.dindon.ble.deviceItems.FORA_IR40;
+import com.dindon.ble.deviceItems.FORA_P80;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
@@ -114,7 +115,7 @@ public class MainActivity extends ReactActivity {
 
         Log.d(TAG, String.format("%s => ObjectTemperature = %d, AmbientTemperature = %d", fora_ir40.getDataTime(), fora_ir40.getObjectTemperature(), fora_ir40.getAmbientTemperature()));
       }
-      /*if (device instanceof FORA_P80) {
+      if (device instanceof FORA_P80) {
         FORA_P80 fora_p80 = ((FORA_P80) device);
 
         String stringValue3 = Double.toString(fora_p80.getSys());
@@ -131,7 +132,7 @@ public class MainActivity extends ReactActivity {
                 .emit("blood", params);
 
         Log.d(TAG, String.format("%s => sys = %d, dia = %d, pulse = %d", fora_p80.getDataTime(), fora_p80.getSys(), fora_p80.getDia(), fora_p80.getPulse()));
-      }*/
+      }
     }
 
     @Override

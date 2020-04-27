@@ -137,6 +137,7 @@ const App: () => React$Node = () => {
                 onPress={() => {
                   let change = orgId==='SIHU'?'NEIHU':'SIHU';
                   setorgId(change);
+                  setloading(true);
                   getPeopleList(change);
 
                 }}

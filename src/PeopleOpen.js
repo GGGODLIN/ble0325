@@ -32,6 +32,7 @@ import {Button, CheckBox} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import md5 from 'md5';
 import moment from 'moment';
+import DialogInput from 'react-native-dialog-input';
 
 const PeopleOpen = props => {
   const [count, setCount] = useState(0);
@@ -45,8 +46,15 @@ const PeopleOpen = props => {
   const [IsAccommodation, setIsAccommodation] = useState(false);
   const [todo, settodo] = useState(0);
 
+  const [isADialogVisible, setisADialogVisible] = useState(false);
+  const [isBDialogVisible, setisBDialogVisible] = useState(false);
+  const [isCDialogVisible, setisCDialogVisible] = useState(false);
+  const [isDDialogVisible, setisDDialogVisible] = useState(false);
+  console.log("QQ",props.temp);
+
+
   const testApi = async () => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/sihu/api/CaseReportApi/RequestService`;
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
 
     console.log(`Making submit request to: ${url}`);
     let md5People = md5(props.people.CaseIdentity);
@@ -63,6 +71,7 @@ const PeopleOpen = props => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S01',
@@ -90,7 +99,7 @@ const PeopleOpen = props => {
   };
 
   const testApi2 = async () => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/sihu/api/CaseReportApi/RequestService`;
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
 
     console.log(`Making submit request to: ${url}`);
     let md5People = md5(props.people.CaseIdentity);
@@ -107,6 +116,7 @@ const PeopleOpen = props => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S02',
@@ -135,7 +145,7 @@ const PeopleOpen = props => {
   };
 
   const postDataApi = async () => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/sihu/api/CaseReportApi/RequestService`;
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
     let url2 = `http://slllc.health.1966.org.tw/api/CaseReport`;
     console.log(`Making submit 生理量測 request to: ${url}`);
     let md5People = md5(props.people.CaseIdentity);
@@ -155,6 +165,7 @@ const PeopleOpen = props => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          OrgId: props.temp,
           IdentityId: md5People,
           ServiceDate: formatNow,
           ServiceCode: 'S01',
@@ -175,12 +186,13 @@ const PeopleOpen = props => {
           ]),
         );
 
-        const dataIn2 = await fetch(url2, {
+      const dataIn2 = await fetch(url2, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          OrgId: props.temp,
           IdentityId: md5People,
           ServiceDate: formatNow,
           ServiceCode: 'S01',
@@ -209,6 +221,7 @@ const PeopleOpen = props => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          OrgId: props.temp,
           IdentityId: md5People,
           ServiceDate: formatNow,
           ServiceCode: 'S02',
@@ -229,12 +242,13 @@ const PeopleOpen = props => {
           ]),
         );
 
-        const dataOut2 = await fetch(url2, {
+      const dataOut2 = await fetch(url2, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          OrgId: props.temp,
           IdentityId: md5People,
           ServiceDate: formatNow,
           ServiceCode: 'S02',
@@ -255,6 +269,14 @@ const PeopleOpen = props => {
           ]),
         );
     }
+    let look = JSON.stringify({
+        OrgId: props.temp,
+        IdentityId: md5People,
+        ServiceDate: formatNow,
+        ServiceCode: 'S03',
+        IsDinner: IsDinner,
+      });
+    console.log("LOOK!",look);
 
     const data2 = await fetch(url, {
       method: 'POST',
@@ -262,6 +284,7 @@ const PeopleOpen = props => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S03',
@@ -270,7 +293,7 @@ const PeopleOpen = props => {
     })
       .then(response => response.json())
       .then(res => {
-        console.log('POST DATA2 AJAX', res);
+        console.log('POST DATA2222222 AJAX', res);
       })
       .catch(err =>
         Alert.alert('網路異常，請稍後再試...', ' ', [
@@ -281,12 +304,13 @@ const PeopleOpen = props => {
         ]),
       );
 
-      const data22 = await fetch(url2, {
+    const data22 = await fetch(url2, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S03',
@@ -312,6 +336,7 @@ const PeopleOpen = props => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S04',
@@ -331,12 +356,13 @@ const PeopleOpen = props => {
         ]),
       );
 
-      const data32 = await fetch(url2, {
+    const data32 = await fetch(url2, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S04',
@@ -362,6 +388,7 @@ const PeopleOpen = props => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S05',
@@ -370,7 +397,7 @@ const PeopleOpen = props => {
     })
       .then(response => response.json())
       .then(res => {
-        console.log('POST DATA4 AJAX', res);
+        console.log('POST DATA4444444 AJAX', res);
       })
       .catch(err =>
         Alert.alert('網路異常，請稍後再試...', ' ', [
@@ -381,12 +408,13 @@ const PeopleOpen = props => {
         ]),
       );
 
-      const data42 = await fetch(url2, {
+    const data42 = await fetch(url2, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S05',
@@ -412,6 +440,7 @@ const PeopleOpen = props => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        OrgId: props.temp,
         IdentityId: md5People,
         ServiceDate: formatNow,
         ServiceCode: 'S06',
@@ -426,7 +455,7 @@ const PeopleOpen = props => {
     })
       .then(response => response.json())
       .then(res => {
-        console.log('POST DATA AJAX', res);
+        console.log('POST S06 AJAX', res);
         Alert.alert('成功', res.Message, [
           {
             text: '確定',
@@ -445,24 +474,28 @@ const PeopleOpen = props => {
         ]),
       );
 
-      const data10 = await fetch('http://slllc.health.1966.org.tw/api/CaseReport', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    const data10 = await fetch(
+      'http://slllc.health.1966.org.tw/api/CaseReport',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S06',
+          IsHeartbeat: IsHeartbeat,
+          HeartbeatValue: count5,
+          IsBloodPressure: IsBloodPressure,
+          SystolicValue: count3,
+          DiastolicValue: count4,
+          IsTemperature: IsTemperature,
+          TemperatureValue: count,
+        }),
       },
-      body: JSON.stringify({
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S06',
-        IsHeartbeat: IsHeartbeat,
-        HeartbeatValue: count5,
-        IsBloodPressure: IsBloodPressure,
-        SystolicValue: count3,
-        DiastolicValue: count4,
-        IsTemperature: IsTemperature,
-        TemperatureValue: count,
-      }),
-    })
+    )
       .then(response => response.json())
       .then(res => {
         console.log('POST DATA10 AJAX', res);
@@ -475,7 +508,7 @@ const PeopleOpen = props => {
           },
         ]);
       })
-      .catch(err =>console.log("GGWP",err));
+      .catch(err => console.log('GGWP', err));
   };
 
   const goBackToPeople = () => {
@@ -507,11 +540,91 @@ const PeopleOpen = props => {
     };
   }, []);
 
+  const onButtonPress = () => {
+    console.log('TESWQ');
+    Alert.prompt(
+      'Enter password',
+      'Enter your password to claim your $1.5B in lottery winnings',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: password => console.log('OK Pressed, password: ' + password),
+        },
+      ],
+      'secure-text',
+    );
+  };
+
   return (
     <SafeAreaView>
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.scrollView}>
+        <DialogInput
+          isDialogVisible={isADialogVisible}
+          title={'請輸入額溫'}
+          
+          hintInput={'請在此輸入額溫'}
+          cancelText={'取消'}
+          submitText={'確定'}
+          submitInput={inputText => {
+            setCount(Number(inputText));
+            setisADialogVisible(false);
+          }}
+          closeDialog={() => {
+            setisADialogVisible(false);
+          }}
+        />
+        <DialogInput
+          isDialogVisible={isBDialogVisible}
+          title={'請輸入收縮壓'}
+          
+          hintInput={'請在此輸入收縮壓'}
+          cancelText={'取消'}
+          submitText={'確定'}
+          submitInput={inputText => {
+            setCount3(Number(inputText));
+            setisBDialogVisible(false);
+          }}
+          closeDialog={() => {
+            setisBDialogVisible(false);
+          }}
+        />
+        <DialogInput
+          isDialogVisible={isCDialogVisible}
+          title={'請輸入舒張壓'}
+          
+          hintInput={'請在此輸入舒張壓'}
+          cancelText={'取消'}
+          submitText={'確定'}
+          submitInput={inputText => {
+            setCount4(Number(inputText));
+            setisCDialogVisible(false);
+          }}
+          closeDialog={() => {
+            setisCDialogVisible(false);
+          }}
+        />
+        <DialogInput
+          isDialogVisible={isDDialogVisible}
+          title={'請輸入心率值'}
+          
+          hintInput={'請在此輸入心率值'}
+          cancelText={'取消'}
+          submitText={'確定'}
+          submitInput={inputText => {
+            setCount5(Number(inputText));
+            setisDDialogVisible(false);
+          }}
+          closeDialog={() => {
+            setisDDialogVisible(false);
+          }}
+        />
         <View style={styles.body}>
           <View style={styles.sectionContainer}>
             <Button title={props.people.CaseName} titleStyle={{fontSize: 25}} />
@@ -539,7 +652,13 @@ const PeopleOpen = props => {
           </View>
           <View
             style={todo === 0 ? {display: 'none'} : styles.sectionContainer}>
-            <Button title={`額溫:    ${count}`} titleStyle={{fontSize: 25}} />
+            <Button
+              title={`額溫:    ${count}`}
+              titleStyle={{fontSize: 25}}
+              onPress={() => {
+                setisADialogVisible(true);
+              }}
+            />
             {/*<Button
               title={`環境溫度:    ${count2}`}
               titleStyle={{fontSize: 25}}
@@ -547,22 +666,33 @@ const PeopleOpen = props => {
             <Button
               title={`收縮壓:    ${count3}`}
               titleStyle={{fontSize: 25}}
+              onPress={() => {
+                setisBDialogVisible(true);
+              }}
             />
             <Button
               title={`舒張壓:    ${count4}`}
               titleStyle={{fontSize: 25}}
+              onPress={() => {
+                setisCDialogVisible(true);
+              }}
             />
             <Button
               title={`心率值:    ${count5}`}
               titleStyle={{fontSize: 25}}
+              onPress={() => {
+                setisDDialogVisible(true);
+              }}
             />
-            <View style={{flexDirection: 'row',justifyContent: 'center'}}>
+            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
               <CheckBox
                 center
                 title="半日托"
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
-                containerStyle={todo !== 1?{display:'none',width: '50%'}:{}}
+                containerStyle={
+                  todo !== 1 ? {display: 'none', width: '50%'} : {}
+                }
                 checked={!IsAllDay}
                 onPress={() => setIsAllDay(false)}
               />
@@ -571,7 +701,9 @@ const PeopleOpen = props => {
                 title="全日托"
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
-                containerStyle={todo !== 1?{display:'none',width: '50%'}:{}}
+                containerStyle={
+                  todo !== 1 ? {display: 'none', width: '50%'} : {}
+                }
                 checked={IsAllDay}
                 onPress={() => setIsAllDay(true)}
               />
@@ -610,9 +742,7 @@ const PeopleOpen = props => {
                 Alert.alert('確定送出?', '', [
                   {
                     text: '取消',
-                    onPress: () => {
-
-                    },
+                    onPress: () => {},
                   },
                   {
                     text: '確定',
@@ -620,7 +750,6 @@ const PeopleOpen = props => {
                       postDataApi();
                     },
                   },
-
                 ]);
               }}
             />
