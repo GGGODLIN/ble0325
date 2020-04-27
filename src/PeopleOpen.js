@@ -479,7 +479,7 @@ const PeopleOpen = props => {
   };
 
   const goBackToPeople = () => {
-    props.getPeopleList();
+    props.getPeopleList(props.temp);
     props.setStatus(true);
   };
 
@@ -556,15 +556,27 @@ const PeopleOpen = props => {
               title={`心率值:    ${count5}`}
               titleStyle={{fontSize: 25}}
             />
-            <CheckBox
-              center
-              title="全日托"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              containerStyle={todo !== 1?{display:'none'}:{}}
-              checked={IsAllDay}
-              onPress={() => setIsAllDay(!IsAllDay)}
-            />
+            <View style={{flexDirection: 'row',justifyContent: 'center'}}>
+              <CheckBox
+                center
+                title="半日托"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1?{display:'none',width: '50%'}:{}}
+                checked={!IsAllDay}
+                onPress={() => setIsAllDay(false)}
+              />
+              <CheckBox
+                center
+                title="全日托"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1?{display:'none',width: '50%'}:{}}
+                checked={IsAllDay}
+                onPress={() => setIsAllDay(true)}
+              />
+            </View>
+
             <CheckBox
               center
               title="晚餐"
@@ -599,7 +611,7 @@ const PeopleOpen = props => {
                   {
                     text: '取消',
                     onPress: () => {
-                      
+
                     },
                   },
                   {
@@ -608,7 +620,7 @@ const PeopleOpen = props => {
                       postDataApi();
                     },
                   },
-                  
+
                 ]);
               }}
             />

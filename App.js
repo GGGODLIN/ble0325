@@ -39,6 +39,7 @@ const App: () => React$Node = () => {
   const [data, setdata] = useState({});
   const [loading, setloading] = useState(true);
   const [people, setpeople] = useState({});
+  const [orgId, setorgId] = useState('SIHU');
 
     request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
       .then(result => {
@@ -51,7 +52,7 @@ const App: () => React$Node = () => {
           })
 
       });
-  const getPeopleList = async () => {
+  const getPeopleList = async (input) => {
     let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrgCaseData`;
     console.log(`Making List request to: ${url}`);
 
@@ -61,7 +62,7 @@ const App: () => React$Node = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        OrgId: 'SIHU',
+        OrgId: input,
       }),
     })
       .then(response => response.json())
@@ -96,7 +97,7 @@ const App: () => React$Node = () => {
   };
 
   useEffect(() => {
-    getPeopleList();
+    getPeopleList('SIHU');
     console.log('INTO LIST');
     const backAction = () => {
       Alert.alert('確定要離開APP?', ' ', [
@@ -129,6 +130,17 @@ const App: () => React$Node = () => {
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
             <View style={styles.body}>
+              <Button
+                title={orgId==='SIHU'?'西湖':'內湖'}
+                titleStyle={{fontSize: 25}}
+                buttonStyle={{backgroundColor: 'orange'}}
+                onPress={() => {
+                  let change = orgId==='SIHU'?'NEIHU':'SIHU';
+                  setorgId(change);
+                  getPeopleList(change);
+
+                }}
+              />
               {data.CaseData.map((val, index) => {
                 return (
                   <View style={styles.sectionContainer}>
@@ -159,7 +171,7 @@ const App: () => React$Node = () => {
       </View>
     );
   }else {
-    return <PeopleOpen setStatus={setStatus} getPeopleList={getPeopleList} people={people}/>;
+    return <PeopleOpen setStatus={setStatus} getPeopleList={getPeopleList} temp={orgId} people={people}/>;
   }
 };
 
