@@ -212,73 +212,8 @@ const PeopleOpen = props => {
             },
           ]),
         );
-    }
 
-    if (todo === 3) {
-      const dataOut = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          OrgId: props.temp,
-          IdentityId: md5People,
-          ServiceDate: formatNow,
-          ServiceCode: 'S02',
-          SignOut: true,
-          AllDay: true,
-        }),
-      })
-        .then(response => response.json())
-        .then(res => {
-          console.log('Out AJAX', res);
-        })
-        .catch(err =>
-          Alert.alert('網路異常，請稍後再試...', ' ', [
-            {
-              text: '確定',
-              onPress: () => {},
-            },
-          ]),
-        );
-
-      const dataOut2 = await fetch(url2, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          OrgId: props.temp,
-          IdentityId: md5People,
-          ServiceDate: formatNow,
-          ServiceCode: 'S02',
-          SignOut: true,
-          AllDay: true,
-        }),
-      })
-        .then(response => response.json())
-        .then(res => {
-          console.log('Out AJAX', res);
-        })
-        .catch(err =>
-          Alert.alert('網路異常，請稍後再試...', ' ', [
-            {
-              text: '確定',
-              onPress: () => {},
-            },
-          ]),
-        );
-    }
-    let look = JSON.stringify({
-        OrgId: props.temp,
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S03',
-        IsDinner: IsDinner,
-      });
-    console.log("LOOK!",look);
-
-    const data2 = await fetch(url, {
+        const data2 = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -433,6 +368,66 @@ const PeopleOpen = props => {
           },
         ]),
       );
+    }
+
+    if (todo === 3) {
+      const dataOut = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S02',
+          SignOut: true,
+          AllDay: true,
+        }),
+      })
+        .then(response => response.json())
+        .then(res => {
+          console.log('Out AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
+
+      const dataOut2 = await fetch(url2, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S02',
+          SignOut: true,
+          AllDay: true,
+        }),
+      })
+        .then(response => response.json())
+        .then(res => {
+          console.log('Out AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
+    }
+    
+
+    
 
     const data = await fetch(url, {
       method: 'POST',
@@ -715,6 +710,9 @@ const PeopleOpen = props => {
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={IsDinner}
+              containerStyle={
+                  todo !== 1 ? {display: 'none'} : {}
+                }
               onPress={() => setIsDinner(!IsDinner)}
             />
             <CheckBox
@@ -723,6 +721,9 @@ const PeopleOpen = props => {
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={IsBathe}
+              containerStyle={
+                  todo !== 1 ? {display: 'none'} : {}
+                }
               onPress={() => setIsBathe(!IsBathe)}
             />
             <CheckBox
@@ -731,13 +732,16 @@ const PeopleOpen = props => {
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={IsAccommodation}
+              containerStyle={
+                  todo !== 1 ? {display: 'none'} : {}
+                }
               onPress={() => setIsAccommodation(!IsAccommodation)}
             />
 
             <Button
               title={'送出結果'}
               titleStyle={{fontSize: 25}}
-              buttonStyle={{backgroundColor: 'orange'}}
+              buttonStyle={{backgroundColor: 'orange',marginTop:24}}
               onPress={() => {
                 Alert.alert('確定送出?', '', [
                   {
