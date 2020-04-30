@@ -35,24 +35,70 @@ import PeopleOpen from './src/PeopleOpen.js';
 import {request, PERMISSIONS} from 'react-native-permissions';
 
 const App: () => React$Node = () => {
+  const [isname, setisname] = useState(false);
   const [status, setStatus] = useState(true);
   const [data, setdata] = useState({});
   const [loading, setloading] = useState(true);
   const [people, setpeople] = useState({});
-  const [orgId, setorgId] = useState('SIHU');
+  const [orgId, setorgId] = useState([]);
+  const [nowOrg, setnowOrg] = useState('');
+  const [nowOrgChi, setnowOrgChi] = useState('');
 
-    request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
-      .then(result => {
-        console.log('PERMISSION?', result);
-      })
-      .then(() => {
-        request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION)
-          .then(result => {
-            console.log('PERMISSION2?', result);
-          })
-
+  request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+    .then(result => {
+      console.log('PERMISSION?', result);
+    })
+    .then(() => {
+      request(PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION).then(result => {
+        console.log('PERMISSION2?', result);
       });
-  const getPeopleList = async (input) => {
+    });
+
+  const getOrgList = async () => {
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrganizationData`;
+    console.log(`Making ORG request to: ${url}`);
+
+    const data = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ParentId: 'SLLLC',
+      }),
+    })
+      .then(response => response.json())
+      .then(res => {
+        console.log('ORG AJAX', res);
+        if (res?.ErrorCode === 'E00') {
+          setorgId(res?.OrgData);
+          setloading(false);
+        } else {
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {
+                console.log(res);
+                getOrgList();
+              },
+            },
+          ]);
+        }
+      })
+      .catch(err =>
+        Alert.alert('網路異常，請稍後再試...', ' ', [
+          {
+            text: '確定',
+            onPress: () => {
+              console.log('ERR2', err);
+              getOrgList();
+            },
+          },
+        ]),
+      );
+  };
+
+  const getPeopleList = async input => {
     let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrgCaseData`;
     console.log(`Making List request to: ${url}`);
 
@@ -77,7 +123,7 @@ const App: () => React$Node = () => {
               text: '確定',
               onPress: () => {
                 console.log(res);
-                getPeopleList();
+                getPeopleList(input);
               },
             },
           ]);
@@ -88,8 +134,8 @@ const App: () => React$Node = () => {
           {
             text: '確定',
             onPress: () => {
-              console.log('ERR2',err);
-              getPeopleList();
+              console.log('ERR2', err);
+              getPeopleList(input);
             },
           },
         ]),
@@ -97,8 +143,7 @@ const App: () => React$Node = () => {
   };
 
   useEffect(() => {
-    getPeopleList('SIHU');
-    console.log('INTO LIST');
+    getOrgList();
     const backAction = () => {
       Alert.alert('確定要離開APP?', ' ', [
         {
@@ -122,7 +167,7 @@ const App: () => React$Node = () => {
     };
   }, []);
 
- if (!loading && status) {
+  if (!loading && status) {
     return (
       <>
         <SafeAreaView>
@@ -130,49 +175,71 @@ const App: () => React$Node = () => {
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
             <View style={styles.body}>
-              <Button
-                title={orgId==='SIHU'?'西湖':'內湖'}
-                titleStyle={{fontSize: 25}}
-                buttonStyle={{backgroundColor: 'orange'}}
-                onPress={() => {
-                  let change = orgId==='SIHU'?'NEIHU':'SIHU';
-                  setorgId(change);
-                  setloading(true);
-                  getPeopleList(change);
-
-                }}
-              />
-              {data.CaseData.map((val, index) => {
-                return (
-                  <View style={styles.sectionContainer}>
-                  <Button
-                    title={val.CaseName}
-                    titleStyle={{fontSize: 25}}
-                    onPress={() => {
-                      setStatus(false);
-                      setpeople(val);
-                    }}
-                  />
-                  </View>
-                );
-              })}
-
-
+              {!isname &&
+                orgId?.map((val, index) => {
+                  return (
+                    <View style={styles.sectionContainer}>
+                      <Button
+                        title={val.OrgName}
+                        titleStyle={{fontSize: 25}}
+                        onPress={() => {
+                          setisname(true);
+                          getPeopleList(val.OrgId);
+                          setloading(true);
+                          setnowOrg(val.OrgId);
+                          setnowOrgChi(val.OrgName);
+                        }}
+                      />
+                    </View>
+                  );
+                })}
+              {isname && (
+                <Button
+                  title={nowOrgChi}
+                  titleStyle={{fontSize: 25,paddingEnd:25}}
+                  buttonStyle={{backgroundColor: 'orange'}}
+                  icon={<Icon name="refresh" size={25} color="white" />}
+                  iconRight
+                  onPress={() => {
+                    setisname(false);
+                  }}
+                />
+              )}
+              {isname &&
+                data?.CaseData?.map((val, index) => {
+                  return (
+                    <View style={styles.sectionContainer}>
+                      <Button
+                        title={val.CaseName}
+                        titleStyle={{fontSize: 25}}
+                        onPress={() => {
+                          setStatus(false);
+                          setpeople(val);
+                        }}
+                      />
+                    </View>
+                  );
+                })}
             </View>
           </ScrollView>
         </SafeAreaView>
       </>
     );
-  }
-
-  else if (loading) {
+  } else if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <ActivityIndicator animating={true} size='large' />
+        <ActivityIndicator animating={true} size="large" />
       </View>
     );
-  }else {
-    return <PeopleOpen setStatus={setStatus} getPeopleList={getPeopleList} temp={orgId} people={people}/>;
+  } else {
+    return (
+      <PeopleOpen
+        setStatus={setStatus}
+        getPeopleList={getPeopleList}
+        temp={nowOrg}
+        people={people}
+      />
+    );
   }
 };
 

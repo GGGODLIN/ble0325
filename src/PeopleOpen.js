@@ -41,8 +41,12 @@ const PeopleOpen = props => {
   const [count4, setCount4] = useState(0);
   const [count5, setCount5] = useState(0);
   const [IsAllDay, setIsAllDay] = useState(false);
+  const [IsAllDayChanged, setIsAllDayChanged] = useState(false);
   const [IsDinner, setIsDinner] = useState(false);
+  const [IsDinnerChanged, setIsDinnerChanged] = useState(false);
   const [IsBathe, setIsBathe] = useState(false);
+  const [IsBatheChanged, setIsBatheChanged] = useState(false);
+  const [IsAccommodationChanged, setIsAccommodationChanged] = useState(false);
   const [IsAccommodation, setIsAccommodation] = useState(false);
   const [todo, settodo] = useState(0);
 
@@ -50,8 +54,7 @@ const PeopleOpen = props => {
   const [isBDialogVisible, setisBDialogVisible] = useState(false);
   const [isCDialogVisible, setisCDialogVisible] = useState(false);
   const [isDDialogVisible, setisDDialogVisible] = useState(false);
-  console.log("QQ",props.temp);
-
+  console.log('QQ', props.temp);
 
   const testApi = async () => {
     let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
@@ -213,161 +216,161 @@ const PeopleOpen = props => {
           ]),
         );
 
-        const data2 = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        OrgId: props.temp,
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S03',
-        IsDinner: IsDinner,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('POST DATA2222222 AJAX', res);
+      const data2 = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S03',
+          IsDinner: IsDinner,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('POST DATA2222222 AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
 
-    const data22 = await fetch(url2, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        OrgId: props.temp,
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S03',
-        IsDinner: IsDinner,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('POST DATA2 AJAX', res);
+      const data22 = await fetch(url2, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S03',
+          IsDinner: IsDinner,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('POST DATA2 AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
 
-    const data3 = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        OrgId: props.temp,
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S04',
-        IsBathe: IsBathe,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('POST DATA3 AJAX', res);
+      const data3 = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S04',
+          IsBathe: IsBathe,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('POST DATA3 AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
 
-    const data32 = await fetch(url2, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        OrgId: props.temp,
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S04',
-        IsBathe: IsBathe,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('POST DATA3 AJAX', res);
+      const data32 = await fetch(url2, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S04',
+          IsBathe: IsBathe,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('POST DATA3 AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
 
-    const data4 = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        OrgId: props.temp,
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S05',
-        IsAccommodation: IsAccommodation,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('POST DATA4444444 AJAX', res);
+      const data4 = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S05',
+          IsAccommodation: IsAccommodation,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('POST DATA4444444 AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
 
-    const data42 = await fetch(url2, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        OrgId: props.temp,
-        IdentityId: md5People,
-        ServiceDate: formatNow,
-        ServiceCode: 'S05',
-        IsAccommodation: IsAccommodation,
-      }),
-    })
-      .then(response => response.json())
-      .then(res => {
-        console.log('POST DATA4 AJAX', res);
+      const data42 = await fetch(url2, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S05',
+          IsAccommodation: IsAccommodation,
+        }),
       })
-      .catch(err =>
-        Alert.alert('網路異常，請稍後再試...', ' ', [
-          {
-            text: '確定',
-            onPress: () => {},
-          },
-        ]),
-      );
+        .then(response => response.json())
+        .then(res => {
+          console.log('POST DATA4 AJAX', res);
+        })
+        .catch(err =>
+          Alert.alert('網路異常，請稍後再試...', ' ', [
+            {
+              text: '確定',
+              onPress: () => {},
+            },
+          ]),
+        );
     }
 
     if (todo === 3) {
@@ -425,9 +428,6 @@ const PeopleOpen = props => {
           ]),
         );
     }
-    
-
-    
 
     const data = await fetch(url, {
       method: 'POST',
@@ -563,7 +563,6 @@ const PeopleOpen = props => {
         <DialogInput
           isDialogVisible={isADialogVisible}
           title={'請輸入額溫'}
-          
           hintInput={'請在此輸入額溫'}
           cancelText={'取消'}
           submitText={'確定'}
@@ -578,7 +577,6 @@ const PeopleOpen = props => {
         <DialogInput
           isDialogVisible={isBDialogVisible}
           title={'請輸入收縮壓'}
-          
           hintInput={'請在此輸入收縮壓'}
           cancelText={'取消'}
           submitText={'確定'}
@@ -593,7 +591,6 @@ const PeopleOpen = props => {
         <DialogInput
           isDialogVisible={isCDialogVisible}
           title={'請輸入舒張壓'}
-          
           hintInput={'請在此輸入舒張壓'}
           cancelText={'取消'}
           submitText={'確定'}
@@ -608,7 +605,6 @@ const PeopleOpen = props => {
         <DialogInput
           isDialogVisible={isDDialogVisible}
           title={'請輸入心率值'}
-          
           hintInput={'請在此輸入心率值'}
           cancelText={'取消'}
           submitText={'確定'}
@@ -624,14 +620,14 @@ const PeopleOpen = props => {
           <View style={styles.sectionContainer}>
             <Button title={props.people.CaseName} titleStyle={{fontSize: 25}} />
             <CheckBox
-              title="報到(量體溫)"
+              title="服務項目(含生理量測)"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={todo === 1}
               onPress={() => settodo(1)}
             />
             <CheckBox
-              title="僅量體溫"
+              title="僅生理量測"
               checkedIcon="dot-circle-o"
               uncheckedIcon="circle-o"
               checked={todo === 2}
@@ -679,69 +675,158 @@ const PeopleOpen = props => {
                 setisDDialogVisible(true);
               }}
             />
-            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <View
+              style={
+                todo !== 1
+                  ? {display: 'none'}
+                  : {
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }
+              }>
+              <Text style={{flex: 1}}>日托：</Text>
               <CheckBox
                 center
                 title="半日托"
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
-                containerStyle={
-                  todo !== 1 ? {display: 'none', width: '50%'} : {}
-                }
-                checked={!IsAllDay}
-                onPress={() => setIsAllDay(false)}
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsAllDayChanged && !IsAllDay}
+                onPress={() => {
+                  setIsAllDay(false);
+                  setIsAllDayChanged(true);
+                }}
               />
               <CheckBox
                 center
                 title="全日托"
                 checkedIcon="dot-circle-o"
                 uncheckedIcon="circle-o"
-                containerStyle={
-                  todo !== 1 ? {display: 'none', width: '50%'} : {}
-                }
-                checked={IsAllDay}
-                onPress={() => setIsAllDay(true)}
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsAllDayChanged && IsAllDay}
+                onPress={() => {
+                  setIsAllDay(true);
+                  setIsAllDayChanged(true);
+                }}
               />
             </View>
 
-            <CheckBox
-              center
-              title="晚餐"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={IsDinner}
-              containerStyle={
-                  todo !== 1 ? {display: 'none'} : {}
-                }
-              onPress={() => setIsDinner(!IsDinner)}
-            />
-            <CheckBox
-              center
-              title="沐浴"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={IsBathe}
-              containerStyle={
-                  todo !== 1 ? {display: 'none'} : {}
-                }
-              onPress={() => setIsBathe(!IsBathe)}
-            />
-            <CheckBox
-              center
-              title="住宿"
-              checkedIcon="dot-circle-o"
-              uncheckedIcon="circle-o"
-              checked={IsAccommodation}
-              containerStyle={
-                  todo !== 1 ? {display: 'none'} : {}
-                }
-              onPress={() => setIsAccommodation(!IsAccommodation)}
-            />
+            <View
+              style={
+                todo !== 1
+                  ? {display: 'none'}
+                  : {
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }
+              }>
+              <Text style={{flex: 1}}>晚餐：</Text>
+              <CheckBox
+                center
+                title="無晚餐"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsDinnerChanged && !IsDinner}
+                onPress={() => {
+                  setIsDinner(false);
+                  setIsDinnerChanged(true);
+                }}
+              />
+              <CheckBox
+                center
+                title="有晚餐"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsDinnerChanged && IsDinner}
+                onPress={() => {
+                  setIsDinner(true);
+                  setIsDinnerChanged(true);
+                }}
+              />
+            </View>
+
+            <View
+              style={
+                todo !== 1
+                  ? {display: 'none'}
+                  : {
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }
+              }>
+              <Text style={{flex: 1}}>沐浴：</Text>
+              <CheckBox
+                center
+                title="無沐浴"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsBatheChanged && !IsBathe}
+                onPress={() => {
+                  setIsBathe(false);
+                  setIsBatheChanged(true);
+                }}
+              />
+              <CheckBox
+                center
+                title="有沐浴"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsBatheChanged && IsBathe}
+                onPress={() => {
+                  setIsBathe(true);
+                  setIsBatheChanged(true);
+                }}
+              />
+            </View>
+
+            <View
+              style={
+                todo !== 1
+                  ? {display: 'none'}
+                  : {
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }
+              }>
+              <Text style={{flex: 1}}>住宿：</Text>
+              <CheckBox
+                center
+                title="無住宿"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsAccommodationChanged && !IsAccommodation}
+                onPress={() => {
+                  setIsAccommodation(false);
+                  setIsAccommodationChanged(true);
+                }}
+              />
+              <CheckBox
+                center
+                title="有住宿"
+                checkedIcon="dot-circle-o"
+                uncheckedIcon="circle-o"
+                containerStyle={todo !== 1 ? {display: 'none'} : {flex: 1.5}}
+                checked={IsAccommodationChanged && IsAccommodation}
+                onPress={() => {
+                  setIsAccommodation(true);
+                  setIsAccommodationChanged(true);
+                }}
+              />
+            </View>
 
             <Button
               title={'送出結果'}
               titleStyle={{fontSize: 25}}
-              buttonStyle={{backgroundColor: 'orange',marginTop:24}}
+              buttonStyle={{backgroundColor: 'orange', marginTop: 24}}
               onPress={() => {
                 Alert.alert('確定送出?', '', [
                   {
@@ -751,7 +836,24 @@ const PeopleOpen = props => {
                   {
                     text: '確定',
                     onPress: () => {
-                      postDataApi();
+                      if (
+                        IsAllDayChanged ||
+                        IsDinnerChanged ||
+                        IsBatheChanged ||
+                        IsAccommodationChanged
+                      ) {
+                        postDataApi();
+                      } else {
+                        let str = '' + (IsAllDayChanged?'':'日托,') + (IsDinnerChanged?'':'晚餐,') + (IsBatheChanged?'':'沐浴,') + (IsAccommodationChanged?'':'住宿');
+                        Alert.alert('未勾選服務項目', '', [
+                          {
+                            text: '確定',
+                            onPress: () => {
+                              
+                            },
+                          },
+                        ]);
+                      }
                     },
                   },
                 ]);
