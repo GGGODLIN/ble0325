@@ -33,8 +33,9 @@ import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PeopleOpen from './src/PeopleOpen.js';
 import {request, PERMISSIONS} from 'react-native-permissions';
+import codePush from 'react-native-code-push';
 
-const App: () => React$Node = () => {
+let App: () => React$Node = () => {
   const [isname, setisname] = useState(false);
   const [status, setStatus] = useState(true);
   const [data, setdata] = useState({});
@@ -55,7 +56,7 @@ const App: () => React$Node = () => {
     });
 
   const getOrgList = async () => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrganizationData`;
+    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrganizationData`;
     console.log(`Making ORG request to: ${url}`);
 
     const data = await fetch(url, {
@@ -99,7 +100,7 @@ const App: () => React$Node = () => {
   };
 
   const getPeopleList = async input => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/Api/CaseReportApi/RequestOrgCaseData`;
+    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrgCaseData`;
     console.log(`Making List request to: ${url}`);
 
     const data = await fetch(url, {
@@ -282,5 +283,16 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
+
+App = codePush({
+  updateDialog: {
+    title: 'APP有新版本，是否更新?',
+    descriptionPrefix: '版本號',
+    optionalUpdateMessage: ' ',
+    optionalIgnoreButtonLabel: '下次再說',
+    optionalInstallButtonLabel: '立即安裝並重啟!',
+  },
+  installMode: codePush.InstallMode.IMMEDIATE,
+})(App);
 
 export default App;

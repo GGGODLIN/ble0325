@@ -15,6 +15,7 @@
     "moment": "^2.24.0",
     "react": "16.9.0",
     "react-native": "0.61.5",
+    "react-native-code-push": "^6.2.0",
     "react-native-device-info": "^5.5.4",
     "react-native-dialog-input": "^1.0.7",
     "react-native-elements": "^1.2.7",

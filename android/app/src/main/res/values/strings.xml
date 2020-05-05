@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">bleTestProject0323</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">J4ZC0dRqwNE1spFo4qTqKWmluWNKzclLYaOGP</string>
 </resources>

@@ -57,7 +57,7 @@ const PeopleOpen = props => {
   console.log('QQ', props.temp);
 
   const testApi = async () => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
+    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestService`;
 
     console.log(`Making submit request to: ${url}`);
     let md5People = md5(props.people.CaseIdentity);
@@ -102,7 +102,7 @@ const PeopleOpen = props => {
   };
 
   const testApi2 = async () => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
+    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestService`;
 
     console.log(`Making submit request to: ${url}`);
     let md5People = md5(props.people.CaseIdentity);
@@ -148,7 +148,7 @@ const PeopleOpen = props => {
   };
 
   const postDataApi = async () => {
-    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
+    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestService`;
     let url2 = `http://slllc.health.1966.org.tw/api/CaseReport`;
     console.log(`Making submit 生理量測 request to: ${url}`);
     let md5People = md5(props.people.CaseIdentity);
@@ -837,6 +837,7 @@ const PeopleOpen = props => {
                     text: '確定',
                     onPress: () => {
                       if (
+                        todo !== 1 ||
                         IsAllDayChanged ||
                         IsDinnerChanged ||
                         IsBatheChanged ||
