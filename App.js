@@ -34,6 +34,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PeopleOpen from './src/PeopleOpen.js';
 import {request, PERMISSIONS} from 'react-native-permissions';
 import codePush from 'react-native-code-push';
+import AsyncStorage from '@react-native-community/async-storage';
 
 let App: () => React$Node = () => {
   const [isname, setisname] = useState(false);
@@ -54,6 +55,25 @@ let App: () => React$Node = () => {
         console.log('PERMISSION2?', result);
       });
     });
+
+  const getAllKeys = async () => {
+    let keys = [];
+    try {
+      keys = await AsyncStorage.getAllKeys();
+      console.log('ASYNC KEYS', keys);
+      for (let i in keys) {
+        //console.log(keys[i]);
+        let res = await AsyncStorage.getItem(keys[i]);
+        let allRequest = Object.keys(JSON.parse(res));
+        //console.log(allRequest);
+        for (let j in allRequest){
+          console.log(allRequest[j]);
+        }
+      }
+    } catch (e) {
+      // read key error
+    }
+  };
 
   const getOrgList = async () => {
     let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrganizationData`;
@@ -171,7 +191,33 @@ let App: () => React$Node = () => {
   if (!loading && status) {
     return (
       <>
-        <SafeAreaView>
+        {isname && (
+          <View>
+            <React.Fragment>
+              <Button
+                title={nowOrgChi}
+                titleStyle={{fontSize: 25, paddingEnd: 25}}
+                buttonStyle={{backgroundColor: 'orange'}}
+                icon={<Icon name="refresh" size={25} color="white" />}
+                iconRight
+                onPress={() => {
+                  setisname(false);
+                }}
+              />
+              <Button
+                title="批次上傳"
+                titleStyle={{fontSize: 25, paddingEnd: 25}}
+                buttonStyle={{backgroundColor: 'orange'}}
+                icon={<Icon name="refresh" size={25} color="white" />}
+                iconRight
+                onPress={() => {
+                  getAllKeys();
+                }}
+              />
+            </React.Fragment>
+          </View>
+        )}
+        <View style={{flex: 1}}>
           <ScrollView
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}>
@@ -194,18 +240,7 @@ let App: () => React$Node = () => {
                     </View>
                   );
                 })}
-              {isname && (
-                <Button
-                  title={nowOrgChi}
-                  titleStyle={{fontSize: 25,paddingEnd:25}}
-                  buttonStyle={{backgroundColor: 'orange'}}
-                  icon={<Icon name="refresh" size={25} color="white" />}
-                  iconRight
-                  onPress={() => {
-                    setisname(false);
-                  }}
-                />
-              )}
+
               {isname &&
                 data?.CaseData?.map((val, index) => {
                   return (
@@ -223,7 +258,7 @@ let App: () => React$Node = () => {
                 })}
             </View>
           </ScrollView>
-        </SafeAreaView>
+        </View>
       </>
     );
   } else if (loading) {

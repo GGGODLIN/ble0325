@@ -33,6 +33,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import md5 from 'md5';
 import moment from 'moment';
 import DialogInput from 'react-native-dialog-input';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const PeopleOpen = props => {
   const [count, setCount] = useState(0);
@@ -54,7 +55,7 @@ const PeopleOpen = props => {
   const [isBDialogVisible, setisBDialogVisible] = useState(false);
   const [isCDialogVisible, setisCDialogVisible] = useState(false);
   const [isDDialogVisible, setisDDialogVisible] = useState(false);
-  console.log('QQ', props.temp);
+  //console.log('QQ', props.temp);
 
   const testApi = async () => {
     let url = `http://www.khcaresys.com/api/CaseReportApi/RequestService`;
@@ -145,6 +146,73 @@ const PeopleOpen = props => {
           },
         ]),
       );
+  };
+
+  const saveFetchRequest = async () => {
+    try {
+      let md5People = md5(props.people.CaseIdentity);
+      let now = new Date();
+      let formatNow = moment(now).format('YYYY-MM-DDTHH:mm:ss');
+      let IsHeartbeat = count5 === 0 ? false : true;
+      let IsBloodPressure = count4 === 0 || count3 === 0 ? false : true;
+      let IsTemperature = count === 0 ? false : true;
+
+      let request_obj = {};
+
+      if (todo === 1) {
+        request_obj.request01 = {
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S01',
+          Reporting: true,
+          AllDay: IsAllDay,
+        };
+        request_obj.request03 = {
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S03',
+          IsDinner: IsDinner,
+        };
+        request_obj.request04 = {
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S04',
+          IsBathe: IsBathe,
+        };
+        request_obj.request05 = {
+          OrgId: props.temp,
+          IdentityId: md5People,
+          ServiceDate: formatNow,
+          ServiceCode: 'S05',
+          IsAccommodation: IsAccommodation,
+        };
+      }
+
+      request_obj.request06 = {
+        OrgId: props.temp,
+        IdentityId: md5People,
+        ServiceDate: formatNow,
+        ServiceCode: 'S06',
+        IsHeartbeat: IsHeartbeat,
+        HeartbeatValue: count5,
+        IsBloodPressure: IsBloodPressure,
+        SystolicValue: count3,
+        DiastolicValue: count4,
+        IsTemperature: IsTemperature,
+        TemperatureValue: count,
+      };
+
+      await AsyncStorage.setItem(props.people.CaseIdentity, JSON.stringify(request_obj));
+      console.log('SAVED ASYNC', request_obj);
+      props.setStatus(true);
+    } catch (error) {
+      console.log('LOCALSTORAGE SAVE WRONG', error);
+      // Error saving data
+    }
+    //console.log("handel",res);
   };
 
   const postDataApi = async () => {
@@ -507,7 +575,7 @@ const PeopleOpen = props => {
   };
 
   const goBackToPeople = () => {
-    props.getPeopleList(props.temp);
+    //props.getPeopleList(props.temp);
     props.setStatus(true);
   };
 
@@ -843,15 +911,19 @@ const PeopleOpen = props => {
                         IsBatheChanged ||
                         IsAccommodationChanged
                       ) {
-                        postDataApi();
+                        //postDataApi();
+                        saveFetchRequest();
                       } else {
-                        let str = '' + (IsAllDayChanged?'':'日托,') + (IsDinnerChanged?'':'晚餐,') + (IsBatheChanged?'':'沐浴,') + (IsAccommodationChanged?'':'住宿');
+                        let str =
+                          '' +
+                          (IsAllDayChanged ? '' : '日托,') +
+                          (IsDinnerChanged ? '' : '晚餐,') +
+                          (IsBatheChanged ? '' : '沐浴,') +
+                          (IsAccommodationChanged ? '' : '住宿');
                         Alert.alert('未勾選服務項目', '', [
                           {
                             text: '確定',
-                            onPress: () => {
-                              
-                            },
+                            onPress: () => {},
                           },
                         ]);
                       }
