@@ -204,6 +204,7 @@ const PeopleOpen = props => {
         IsTemperature: IsTemperature,
         TemperatureValue: count,
       };
+      request_obj.todo = todo;
 
       await AsyncStorage.setItem(props.people.CaseIdentity, JSON.stringify(request_obj));
       console.log('SAVED ASYNC', request_obj);
@@ -892,11 +893,11 @@ const PeopleOpen = props => {
             </View>
 
             <Button
-              title={'送出結果'}
+              title={'保存結果'}
               titleStyle={{fontSize: 25}}
               buttonStyle={{backgroundColor: 'orange', marginTop: 24}}
               onPress={() => {
-                Alert.alert('確定送出?', '', [
+                Alert.alert('確定保存?', '', [
                   {
                     text: '取消',
                     onPress: () => {},

@@ -41,10 +41,12 @@ let App: () => React$Node = () => {
   const [status, setStatus] = useState(true);
   const [data, setdata] = useState({});
   const [loading, setloading] = useState(true);
+  const [countDown, setcountDown] = useState('讀取中...');
   const [people, setpeople] = useState({});
   const [orgId, setorgId] = useState([]);
   const [nowOrg, setnowOrg] = useState('');
   const [nowOrgChi, setnowOrgChi] = useState('');
+
 
   request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
     .then(result => {
@@ -58,25 +60,156 @@ let App: () => React$Node = () => {
 
   const getAllKeys = async () => {
     let keys = [];
+    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestService`;
+    //let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
+    let url2 = `http://slllc.health.1966.org.tw/api/CaseReport`;
+    let isError = false;
+
     try {
+      setloading(true);
       keys = await AsyncStorage.getAllKeys();
-      console.log('ASYNC KEYS', keys);
+      console.log('ASYNC KEYS', keys,keys.length);
+      let keyLength = keys.length;
+      setcountDown(keyLength);
       for (let i in keys) {
         //console.log(keys[i]);
         let res = await AsyncStorage.getItem(keys[i]);
-        let allRequest = Object.keys(JSON.parse(res));
+        let jsonRes = JSON.parse(res);
+        let allRequest = Object.keys(jsonRes);
         //console.log(allRequest);
-        for (let j in allRequest){
-          console.log(allRequest[j]);
+        if (jsonRes.todo == 1) {
+          for (let j in allRequest) {
+            let req = allRequest[j];
+            if (req !== 'todo') {
+              let promise = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonRes[req]),
+              })
+                .then(function(response) {
+                  if (!response.ok) {
+                    throw new Error(response.statusText);
+                  }
+                  //console.log(response);
+                  return response.json(); // 轉換成 JSON 再傳入下一個 then 中處理
+                })
+                .catch(function(error) {
+                  console.warn(error);
+                  isError = true;
+                });
+
+              let promise2 = await fetch(url2, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonRes[req]),
+              })
+                .then(function(response) {
+                  if (!response.ok) {
+                    throw new Error(response.statusText);
+                  }
+                  //console.log(response);
+                  return response.json(); // 轉換成 JSON 再傳入下一個 then 中處理
+                })
+                .catch(function(error) {
+                  console.warn(error);
+                  isError = true;
+                });
+              console.log('todo===1', jsonRes[req],promise,promise2);
+            }
+          }
+        } else {
+          for (let j in allRequest) {
+            let req = allRequest[j];
+            if (req !== 'todo') {
+              let promise = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonRes[req]),
+              })
+                .then(function(response) {
+                  if (!response.ok) {
+                    throw new Error(response.statusText);
+                  }
+                  //console.log(response);
+                  return response.json(); // 轉換成 JSON 再傳入下一個 then 中處理
+                })
+                .catch(function(error) {
+                  console.warn(error);
+                  isError = true;
+                });
+
+              let promise2 = await fetch(url2, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(jsonRes[req]),
+              })
+                .then(function(response) {
+                  if (!response.ok) {
+                    throw new Error(response.statusText);
+                  }
+                  //console.log(response);
+                  return response.json(); // 轉換成 JSON 再傳入下一個 then 中處理
+                })
+                .catch(function(error) {
+                  console.warn(error);
+                  isError = true;
+                });
+
+              console.log('todo===3', jsonRes[req],promise,promise2);
+            }
+          }
         }
+        keyLength -= 1;
+        setcountDown(keyLength);
       }
+      if (isError){
+        throw new Error("網路異常");
+      }
+      Alert.alert('批次上傳完成!', `總共上傳了${keys.length}筆資料`, [
+        {
+          text: '確定',
+          onPress: () => {
+            clearAll();
+          },
+        },
+      ]);
     } catch (e) {
+      Alert.alert('批次上傳失敗!!!', e.message, [
+        {
+          text: '確定',
+          onPress: () => {
+            
+          },
+        },
+      ]);
+      console.warn(e);
       // read key error
     }
+    setloading(false);
+  };
+
+  const clearAll = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (e) {
+      console.warn(e);
+      // clear error
+    }
+    setcountDown('讀取中...');
+    console.log('Done.');
   };
 
   const getOrgList = async () => {
     let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrganizationData`;
+    //let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestOrganizationData`;
     console.log(`Making ORG request to: ${url}`);
 
     const data = await fetch(url, {
@@ -121,6 +254,7 @@ let App: () => React$Node = () => {
 
   const getPeopleList = async input => {
     let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrgCaseData`;
+    //let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestOrgCaseData`;
     console.log(`Making List request to: ${url}`);
 
     const data = await fetch(url, {
@@ -207,11 +341,22 @@ let App: () => React$Node = () => {
               <Button
                 title="批次上傳"
                 titleStyle={{fontSize: 25, paddingEnd: 25}}
-                buttonStyle={{backgroundColor: 'orange'}}
-                icon={<Icon name="refresh" size={25} color="white" />}
+                buttonStyle={{backgroundColor: 'green'}}
+                icon={<Icon name="cloud-upload" size={25} color="white" />}
                 iconRight
                 onPress={() => {
-                  getAllKeys();
+                  Alert.alert('確定上傳?', '', [
+                  {
+                    text: '取消',
+                    onPress: () => {},
+                  },
+                  {
+                    text: '確定',
+                    onPress: () => {
+                      getAllKeys();
+                    },
+                  },
+                ]);
                 }}
               />
             </React.Fragment>
@@ -265,6 +410,7 @@ let App: () => React$Node = () => {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator animating={true} size="large" />
+        <Text style={{fontSize:36}}>{countDown}</Text>
       </View>
     );
   } else {
