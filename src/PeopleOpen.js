@@ -160,35 +160,43 @@ const PeopleOpen = props => {
       let request_obj = {};
 
       if (todo === 1) {
-        request_obj.request01 = {
-          OrgId: props.temp,
-          IdentityId: md5People,
-          ServiceDate: formatNow,
-          ServiceCode: 'S01',
-          Reporting: true,
-          AllDay: IsAllDay,
-        };
-        request_obj.request03 = {
-          OrgId: props.temp,
-          IdentityId: md5People,
-          ServiceDate: formatNow,
-          ServiceCode: 'S03',
-          IsDinner: IsDinner,
-        };
-        request_obj.request04 = {
-          OrgId: props.temp,
-          IdentityId: md5People,
-          ServiceDate: formatNow,
-          ServiceCode: 'S04',
-          IsBathe: IsBathe,
-        };
-        request_obj.request05 = {
-          OrgId: props.temp,
-          IdentityId: md5People,
-          ServiceDate: formatNow,
-          ServiceCode: 'S05',
-          IsAccommodation: IsAccommodation,
-        };
+        if (IsAllDayChanged) {
+          request_obj.request01 = {
+            OrgId: props.temp,
+            IdentityId: md5People,
+            ServiceDate: formatNow,
+            ServiceCode: 'S01',
+            Reporting: true,
+            AllDay: IsAllDay,
+          };
+        }
+        if (IsDinnerChanged) {
+          request_obj.request03 = {
+            OrgId: props.temp,
+            IdentityId: md5People,
+            ServiceDate: formatNow,
+            ServiceCode: 'S03',
+            IsDinner: IsDinner,
+          };
+        }
+        if (IsBatheChanged) {
+          request_obj.request04 = {
+            OrgId: props.temp,
+            IdentityId: md5People,
+            ServiceDate: formatNow,
+            ServiceCode: 'S04',
+            IsBathe: IsBathe,
+          };
+        }
+        if (IsAccommodationChanged) {
+          request_obj.request05 = {
+            OrgId: props.temp,
+            IdentityId: md5People,
+            ServiceDate: formatNow,
+            ServiceCode: 'S05',
+            IsAccommodation: IsAccommodation,
+          };
+        }
       }
 
       request_obj.request06 = {
@@ -206,7 +214,10 @@ const PeopleOpen = props => {
       };
       request_obj.todo = todo;
 
-      await AsyncStorage.setItem(props.people.CaseIdentity, JSON.stringify(request_obj));
+      await AsyncStorage.mergeItem(
+        props.people.CaseIdentity,
+        JSON.stringify(request_obj),
+      );
       console.log('SAVED ASYNC', request_obj);
       props.setStatus(true);
     } catch (error) {
