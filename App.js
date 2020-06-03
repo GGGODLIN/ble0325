@@ -196,6 +196,30 @@ let App: () => React$Node = () => {
     setloading(false);
   };
 
+  const asyncLog = async () => {
+    let keys = [];
+    
+    let isError = false;
+
+   
+      //setloading(true);
+      keys = await AsyncStorage.getAllKeys();
+      console.log('ASYNC KEYS', keys,keys.length);
+      let keyLength = keys.length;
+      setcountDown(keyLength);
+      for (let i in keys) {
+        //console.log(keys[i]);
+        let res = await AsyncStorage.getItem(keys[i]);
+        let jsonRes = JSON.parse(res);
+        console.warn(jsonRes);
+        let allRequest = Object.keys(jsonRes);
+        console.warn(allRequest);
+        
+        
+      }
+ 
+}
+
   const clearAll = async () => {
     try {
       await AsyncStorage.clear();
@@ -277,7 +301,7 @@ let App: () => React$Node = () => {
             {
               text: '確定',
               onPress: () => {
-                console.log(res);
+                //console.log(res);
                 getPeopleList(input);
               },
             },
@@ -321,6 +345,10 @@ let App: () => React$Node = () => {
       backHandler.remove();
     };
   }, []);
+
+  useEffect(() => {
+    asyncLog();
+  }, [status]);
 
   if (!loading && status) {
     return (
