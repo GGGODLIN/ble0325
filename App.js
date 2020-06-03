@@ -60,8 +60,8 @@ let App: () => React$Node = () => {
 
   const getAllKeys = async () => {
     let keys = [];
-    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestService`;
-    //let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
+    //let url = `http://www.khcaresys.com/api/CaseReportApi/RequestService`;
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestService`;
     let url2 = `http://slllc.health.1966.org.tw/api/CaseReport`;
     let isError = false;
 
@@ -232,8 +232,8 @@ let App: () => React$Node = () => {
   };
 
   const getOrgList = async () => {
-    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrganizationData`;
-    //let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestOrganizationData`;
+    //let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrganizationData`;
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestOrganizationData`;
     console.log(`Making ORG request to: ${url}`);
 
     const data = await fetch(url, {
@@ -277,8 +277,8 @@ let App: () => React$Node = () => {
   };
 
   const getPeopleList = async input => {
-    let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrgCaseData`;
-    //let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestOrgCaseData`;
+    //let url = `http://www.khcaresys.com/api/CaseReportApi/RequestOrgCaseData`;
+    let url = `http://daycare.southeastasia.cloudapp.azure.com:9800/api/CaseReportApi/RequestOrgCaseData`;
     console.log(`Making List request to: ${url}`);
 
     const data = await fetch(url, {
